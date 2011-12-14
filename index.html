@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- Made with Joy by What Cheer ♥ http://whatcheer.com -->
+		<meta charset="utf-8">
+		<title>Snow</title>
+		<style>
+			html, body { height: 100%; margin: 0; padding: 0; }
+		</style>
+	</head>
+	<body onload="letItSnow();">
+		<script src="snowflake.js"></script>
+		<script>
+			var flakes = [];
+			function letItSnow () {
+				// Ballpark how many snowflakes we want based on page width
+				var num_flakes = Math.floor( document.body.clientWidth / 20 );
+				
+				// For performance though, and clutter, 50 is about the max
+				if( num_flakes > 50 ) { num_flakes = 50; }
+
+				for( var i = 0; i < num_flakes ; i++ ) {
+					// The SnowFlake constructor takes an options hash
+					var options = {
+						// Parent is the DOM object we base our calculations on
+						parent: document.body,
+
+						// Left is the initial x offset in pixels of our flake
+						left: Math.floor( Math.random() * document.body.clientWidth * 0.9 ) + 1,
+
+						// Top is the initial y offset in pixels of our flake
+						// Here we are making sure the first ten are right above the page (hidden by overflow)
+						// so that we get a nice, immediate snowfall.  The rest are spaced above the page
+						// at random heights based on the page height
+						top : ( i < 10 ) ? Math.floor( Math.random() * -60 ) : Math.floor( Math.random() * document.body.clientHeight / 2 ) * -1,
+
+						// This is a fraction for the roll speed of the flake.
+						// This number * the number of elapsed ticks = degree of rotation
+						roll_delay: ( Math.random() * 4 ) - 2
+					};
+
+					// We have three sizes of flakes here, so we randomly choose one for each flake
+					switch( Math.floor( Math.random() * 3 ) + 1 ) {
+						default:
+							// Path to the snowflake image
+							options.img = 'flakes/smalls.png';
+
+							// Weight is the speed at which the flake falls
+							// A nice effect, used here, is for larger flakes
+							// to be heavier.
+							options.weight = 1;
+
+							// This is the variant of how large a distance that
+							// a snowflake varies on it's x-axis.
+							// Again, larger flakes look better with a bit more
+							// sway.  Play around until you find what you like.
+							options.sway = 10;
+							break;
+						case 2:
+							options.img = 'flakes/med.png';
+							options.weight = 1.25;
+							options.sway = 20;
+							break;
+						case 3:
+							options.img = 'flakes/large.png';
+							options.weight = 1.75;
+							options.sway = 30;
+							break;
+					}
+					// Now we create and start the snowflake
+					flakes.push( new SnowFlake( options ) );
+					flakes[i].start();
+				}
+			}
+		</script>
+	</body>
+</html>
